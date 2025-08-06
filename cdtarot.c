@@ -53,6 +53,7 @@ usage() {
 
 /*
  * Draws the spread.
+ * Returns an array of size draw_size.
  */
 struct card
 *draw_spread(int draw_size) {
@@ -88,10 +89,42 @@ struct card
  * Prints the draw, with meanings if the flag is set
  */
 void
-print_draw(struct card draw[], int draw_size) {
+print_draw(struct card draw[], int draw_size, int print_meanings_flag) {
     /* We know how to handle a draw size of 5. Anything else, just print the index. */
-    if (draw_size != 5) {
+    if (draw == 5) {
+        printf("True:\t\t%s", draw[0].name);
 
+        if (print_meanings_flag)
+            printf(" (%s)", draw[0].meaning);
+
+        printf("\nFalse:\t\t", draw[1].name);
+
+        if (print_meanings_flag)
+            printf(" (%s)", draw[1].meaning);
+
+        printf("\nMeaningless:\t", draw[2].name);
+        
+        if (print_meanings_flag)
+            printf(" (%s)", draw[2].meaning);
+
+        printf("\nSeek:\t\t", draw[3].name);
+        
+        if (print_meanings_flag)
+            printf(" (%s)", draw[3].meaning);
+
+        printf("\nAvoid:\t\t", draw[4].name);
+
+        if (print_meanings_flag)
+            printf(" (%s)", draw[4].meaning);
+
+        putchar('\n');
+    } else {
+        for (int i = 0; i < draw_size; i++) {
+            if (print_meanings_flag)
+                printf("%s (%s)\n", draw[i].name, draw[i].meaning);
+            else
+                printd("%s\n", draw[i].name);
+        }
     }
 }
 
@@ -112,11 +145,11 @@ print_draw(struct card draw[], int draw_size) {
 int
 main(int argc, char *argv[])
 {
-    int print_meanings_flag, print_usage_flag, ch;
+    int print_meanings_flag, ch;
+    struct card *draw;
    
     /* parse command line arguments */
     print_meanings_flag = 0;
-    print_usage_flag = 0;
 
     while ((ch = getopt(argc, argv, "hm")) != -1) {
         switch (ch) {
@@ -129,10 +162,14 @@ main(int argc, char *argv[])
                 usage();
                 exit(0);
         }
+
+        argc -= optind;
+        argv += optind;
     }
 
-    argc -= optind;
-    argv += optind;
 
+    draw = draw_spread(DRAW_SIZE);
+    print_draw(draw, DRAW_SIZE, print_meanings_flag);
 
+    return 0;
 }

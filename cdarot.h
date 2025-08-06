@@ -49,5 +49,6 @@ static char *usage_string = "Usage:\n"
 
 static void usage(void);                  /* prints usage information */
 struct card *draw_spread(int _draw_size); /* draws the spread         */
+void        print_draw(struct card _draw[], int _draw_size, int _print_meanings_flag);
 
 #endif /* !_CDAROT_H */
