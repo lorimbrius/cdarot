@@ -55,9 +55,8 @@ usage() {
  * Draws the spread.
  * Returns an array of size draw_size.
  */
-struct card
-*draw_spread(int draw_size) {
-    struct card draw[draw_size]; /* holds the draw           */
+void
+draw_spread(struct card draw[], int draw_size) {
     struct card drawn_card;      /* card that was just drawn */
     int         i, idx;          /* index of drawn card      */
 
@@ -69,20 +68,19 @@ struct card
     i = 0;
 
     while (i < draw_size) {
+redraw:
         idx        = random() % DECK_SIZE;
         drawn_card = DECK[idx];
         
         /* redraw duplicates */
         for (int j = 0; j < draw_size; j++) {
             if (strncmp(draw[j].name, drawn_card.name, strlen(drawn_card.name)) == 0)
-                continue;
+                goto redraw;
         }
 
         /* put card in draw and increment index */
         memcpy(&draw[i++], &drawn_card, sizeof(struct card));
     }
-
-    return draw;
 }
 
 /*
@@ -91,28 +89,28 @@ struct card
 void
 print_draw(struct card draw[], int draw_size, int print_meanings_flag) {
     /* We know how to handle a draw size of 5. Anything else, just print the index. */
-    if (draw == 5) {
+    if (draw_size == 5) {
         printf("True:\t\t%s", draw[0].name);
 
         if (print_meanings_flag)
             printf(" (%s)", draw[0].meaning);
 
-        printf("\nFalse:\t\t", draw[1].name);
+        printf("\nFalse:\t\t%s", draw[1].name);
 
         if (print_meanings_flag)
             printf(" (%s)", draw[1].meaning);
 
-        printf("\nMeaningless:\t", draw[2].name);
+        printf("\nMeaningless:\t%s", draw[2].name);
         
         if (print_meanings_flag)
             printf(" (%s)", draw[2].meaning);
 
-        printf("\nSeek:\t\t", draw[3].name);
+        printf("\nSeek:\t\t%s", draw[3].name);
         
         if (print_meanings_flag)
             printf(" (%s)", draw[3].meaning);
 
-        printf("\nAvoid:\t\t", draw[4].name);
+        printf("\nAvoid:\t\t%s", draw[4].name);
 
         if (print_meanings_flag)
             printf(" (%s)", draw[4].meaning);
@@ -123,7 +121,7 @@ print_draw(struct card draw[], int draw_size, int print_meanings_flag) {
             if (print_meanings_flag)
                 printf("%s (%s)\n", draw[i].name, draw[i].meaning);
             else
-                printd("%s\n", draw[i].name);
+                printf("%s\n", draw[i].name);
         }
     }
 }
@@ -145,8 +143,8 @@ print_draw(struct card draw[], int draw_size, int print_meanings_flag) {
 int
 main(int argc, char *argv[])
 {
-    int print_meanings_flag, ch;
-    struct card *draw;
+    int         print_meanings_flag, ch;
+    struct card draw[DRAW_SIZE];
    
     /* parse command line arguments */
     print_meanings_flag = 0;
@@ -167,8 +165,7 @@ main(int argc, char *argv[])
         argv += optind;
     }
 
-
-    draw = draw_spread(DRAW_SIZE);
+    draw_spread(draw, DRAW_SIZE);
     print_draw(draw, DRAW_SIZE, print_meanings_flag);
 
     return 0;
