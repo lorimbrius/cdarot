@@ -8,7 +8,7 @@
 #include <time.h>
 #include <string.h>
 
-#include "cdarot.h"
+#include "dtarot.h"
 
 #define DRAW_SIZE 5
 #define DECK_SIZE 73

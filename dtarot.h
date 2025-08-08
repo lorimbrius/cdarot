@@ -2,8 +2,8 @@
  * SPDX-License-Identifier: CC0-1.0
  */
 
-#ifndef _CDAROT_H
-#define _CDAROT_H
+#ifndef _DTAROT_H
+#define _DTAROT_H
 
 #include "deck.h"
 
@@ -23,4 +23,4 @@ static void usage(void);
 void        draw_spread(struct card _draw[], int _draw_size);
 void        print_draw(struct card _draw[], int _draw_size, int _print_meanings_flag);
 
-#endif /* !_CDAROT_H */
+#endif /* !_DTAROT_H */
