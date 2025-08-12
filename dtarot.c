@@ -28,30 +28,27 @@ usage() {
  * Returns an array of size draw_size.
  */
 void
-draw_spread(struct card draw[], int draw_size) {
-    struct card drawn_card;      /* card that was just drawn */
+draw_spread(struct card *draw[], int draw_size) {
+    struct card *drawn_card;     /* card that was just drawn */
     int         i, idx;          /* index of drawn card      */
 
     srandom(time(NULL));         /* seed RNG                 */
-
-    /* initialize draw to zeroes */
-    memset(draw, 0, sizeof(struct card) * draw_size);
 
     i = 0;
 
     while (i < draw_size) {
 redraw:
         idx        = random() % DECK_SIZE;
-        drawn_card = DECK[idx];
+        drawn_card = &DECK[idx];
         
         /* redraw duplicates */
-        for (int j = 0; j < draw_size; j++) {
-            if (strncmp(draw[j].name, drawn_card.name, strlen(drawn_card.name)) == 0)
+        for (int j = 0; j < i; j++) {
+            if (strncmp(draw[j]->name, drawn_card->name, strlen(drawn_card->name)) == 0)
                 goto redraw;
         }
 
         /* put card in draw and increment index */
-        memcpy(&draw[i++], &drawn_card, sizeof(struct card));
+        draw[i++] = drawn_card;
     }
 }
 
@@ -59,41 +56,41 @@ redraw:
  * Prints the draw, with meanings if the flag is set
  */
 void
-print_draw(struct card draw[], int draw_size, int print_meanings_flag) {
+print_draw(struct card *draw[], int draw_size, int print_meanings_flag) {
     /* We know how to handle a draw size of 5. Anything else, just print the index. */
     if (draw_size == 5) {
-        printf("True:\t\t%s", draw[0].name);
+        printf("True:\t\t%s", draw[0]->name);
 
         if (print_meanings_flag)
-            printf(" (%s)", draw[0].meaning);
+            printf(" (%s)", draw[0]->meaning);
 
-        printf("\nFalse:\t\t%s", draw[1].name);
+        printf("\nFalse:\t\t%s", draw[1]->name);
 
         if (print_meanings_flag)
-            printf(" (%s)", draw[1].meaning);
+            printf(" (%s)", draw[1]->meaning);
 
-        printf("\nMeaningless:\t%s", draw[2].name);
+        printf("\nMeaningless:\t%s", draw[2]->name);
         
         if (print_meanings_flag)
-            printf(" (%s)", draw[2].meaning);
+            printf(" (%s)", draw[2]->meaning);
 
-        printf("\nSeek:\t\t%s", draw[3].name);
+        printf("\nSeek:\t\t%s", draw[3]->name);
         
         if (print_meanings_flag)
-            printf(" (%s)", draw[3].meaning);
+            printf(" (%s)", draw[3]->meaning);
 
-        printf("\nAvoid:\t\t%s", draw[4].name);
+        printf("\nAvoid:\t\t%s", draw[4]->name);
 
         if (print_meanings_flag)
-            printf(" (%s)", draw[4].meaning);
+            printf(" (%s)", draw[4]->meaning);
 
         putchar('\n');
     } else {
         for (int i = 0; i < draw_size; i++) {
             if (print_meanings_flag)
-                printf("%s (%s)\n", draw[i].name, draw[i].meaning);
+                printf("%s (%s)\n", draw[i]->name, draw[i]->meaning);
             else
-                printf("%s\n", draw[i].name);
+                printf("%s\n", draw[i]->name);
         }
     }
 }
@@ -116,7 +113,7 @@ int
 main(int argc, char *argv[])
 {
     int         print_meanings_flag, ch;
-    struct card draw[DRAW_SIZE];
+    struct card *draw[DRAW_SIZE];
    
     /* parse command line arguments */
     print_meanings_flag = 0;
