@@ -20,7 +20,7 @@ static char *usage_string = "Usage:\n"
                             "For further enlightenment, consult your pineal gland.\n";
 
 static void usage(void);                                      
-void        draw_spread(struct card _draw[], int _draw_size);
-void        print_draw(struct card _draw[], int _draw_size, int _print_meanings_flag);
+void        draw_spread(struct card *_draw[], int _draw_size);
+void        print_draw(struct card *_draw[], int _draw_size, int _print_meanings_flag);
 
 #endif /* !_DTAROT_H */
